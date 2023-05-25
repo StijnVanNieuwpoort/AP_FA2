@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <algorithm>
 #include "pallet.hpp"
 #include "container.hpp"
 
@@ -14,4 +15,7 @@ class Shelf : public Container {
     Shelf();
 
     bool swapPallet(int slot, int slot2);
+
+    bool isEmpty();
+    bool isFull();
 };

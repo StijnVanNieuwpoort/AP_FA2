@@ -22,4 +22,7 @@ class Pallet : public Container {
 
     bool takeOne();
     bool putOne();
+
+    bool isEmpty();
+    bool isFull();
 };
