@@ -16,6 +16,6 @@ class Shelf : public Container {
 
     bool swapPallet(int slot, int slot2);
 
-    bool isEmpty();
-    bool isFull();
+    bool isEmpty() override;
+    bool isFull() override;
 };

@@ -73,6 +73,7 @@ Warehouse createMockWarehouse(){
 
 TEST_CASE("Rearrange empty shelf", "Warehouse::rearrangeShelf"){
     // Construct empty warehouse and add empty shelf and forklift certified Employee.
+    std::cout << "1" << std::endl;
     Warehouse warehouse = Warehouse();
     warehouse.addShelf(Shelf());
     warehouse.addEmployee(Employee("Bob", true));
@@ -83,6 +84,7 @@ TEST_CASE("Rearrange empty shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 0);
+    std::cout << "2" << std::endl;
 
     // Rearrange the first and only shelf of the warehouse.
     bool successful = warehouse.rearrangeShelf(warehouse.shelves[0]);
@@ -95,10 +97,14 @@ TEST_CASE("Rearrange empty shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 0);
+    std::cout << "3" << std::endl;
+
 }
 
 TEST_CASE("Rearrange full shelf", "Warehouse::rearrangeShelf"){
     // Construct warehouse with unsorted shelf of books.
+    std::cout << "4" << std::endl;
+   
     Warehouse warehouse = Warehouse();
     Shelf shelf1 = Shelf();
     shelf1.pallets = {
@@ -117,6 +123,7 @@ TEST_CASE("Rearrange full shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 40);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 30);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 10);
+    std::cout << "5" << std::endl;
 
     // Rearrange the first and only shelf of the warehouse.
     bool successful = warehouse.rearrangeShelf(warehouse.shelves[0]);
@@ -129,6 +136,8 @@ TEST_CASE("Rearrange full shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 20);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 30);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 40);
+    std::cout << "6" << std::endl;
+
 }
 
 TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
@@ -141,7 +150,8 @@ TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
         Pallet(), 
         Pallet()
     };
-    
+    std::cout << "7" << std::endl;
+   
     warehouse.addEmployee(Employee("Bob", true));
     warehouse.addShelf(shelf1);
 
@@ -151,6 +161,7 @@ TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 20);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 0);
+    std::cout << "8" << std::endl;
 
     // Rearrange the first and only shelf of the warehouse.
     bool successful = warehouse.rearrangeShelf(warehouse.shelves[0]);
@@ -163,6 +174,7 @@ TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 20);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 40);
+    std::cout << "9" << std::endl;
 }
 
 TEST_CASE("Rearrange shelf without qualified employee", "Warehouse::rearrangeShelf"){

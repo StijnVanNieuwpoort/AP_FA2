@@ -1,6 +1,8 @@
 #include "include/shelf.hpp"
 
-Shelf::Shelf() {}
+Shelf::Shelf() {
+    this -> pallets = {Pallet(), Pallet(), Pallet(), Pallet()};
+}
 
 bool Shelf::swapPallet(int slot, int slot2) {
     std::swap(this -> pallets[slot], this -> pallets[slot2]);

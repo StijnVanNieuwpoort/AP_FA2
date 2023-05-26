@@ -23,6 +23,6 @@ class Pallet : public Container {
     bool takeOne();
     bool putOne();
 
-    bool isEmpty();
-    bool isFull();
+    bool isEmpty() override;
+    bool isFull() override;
 };

@@ -6,7 +6,9 @@ Pallet::Pallet(std::string itemName, int itemCapacity, int itemCount) {
     this -> itemCount = itemCount;
 }
 
-Pallet::Pallet() {}
+Pallet::Pallet() {
+    this -> itemCount = 0;
+}
 
 std::string Pallet::getItemName() {
     return this -> itemName;
@@ -21,7 +23,11 @@ int Pallet::getRemainingSpace() {
 }
 
 bool Pallet::reallocateEmptyPallet(std::string itemName, int itemCapacity) {
-    return true;
+    if (this -> itemCount == 0) {
+        this -> itemName = itemName;
+        this -> itemCapacity = itemCapacity;
+    }
+    return false;
 }
 
 bool Pallet::takeOne() {

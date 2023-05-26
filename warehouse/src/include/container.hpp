@@ -5,6 +5,6 @@
 class Container {
     public:
 
-    virtual bool isEmpty();
-    virtual bool isFull();
+    virtual bool isEmpty()=0;
+    virtual bool isFull()=0;
 };
