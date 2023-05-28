@@ -73,7 +73,6 @@ Warehouse createMockWarehouse(){
 
 TEST_CASE("Rearrange empty shelf", "Warehouse::rearrangeShelf"){
     // Construct empty warehouse and add empty shelf and forklift certified Employee.
-    std::cout << "1" << std::endl;
     Warehouse warehouse = Warehouse();
     warehouse.addShelf(Shelf());
     warehouse.addEmployee(Employee("Bob", true));
@@ -84,7 +83,6 @@ TEST_CASE("Rearrange empty shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 0);
-    std::cout << "2" << std::endl;
 
     // Rearrange the first and only shelf of the warehouse.
     bool successful = warehouse.rearrangeShelf(warehouse.shelves[0]);
@@ -97,13 +95,11 @@ TEST_CASE("Rearrange empty shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 0);
-    std::cout << "3" << std::endl;
 
 }
 
 TEST_CASE("Rearrange full shelf", "Warehouse::rearrangeShelf"){
     // Construct warehouse with unsorted shelf of books.
-    std::cout << "4" << std::endl;
    
     Warehouse warehouse = Warehouse();
     Shelf shelf1 = Shelf();
@@ -123,7 +119,6 @@ TEST_CASE("Rearrange full shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 40);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 30);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 10);
-    std::cout << "5" << std::endl;
 
     // Rearrange the first and only shelf of the warehouse.
     bool successful = warehouse.rearrangeShelf(warehouse.shelves[0]);
@@ -136,7 +131,6 @@ TEST_CASE("Rearrange full shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 20);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 30);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 40);
-    std::cout << "6" << std::endl;
 
 }
 
@@ -150,7 +144,6 @@ TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
         Pallet(), 
         Pallet()
     };
-    std::cout << "7" << std::endl;
    
     warehouse.addEmployee(Employee("Bob", true));
     warehouse.addShelf(shelf1);
@@ -161,7 +154,6 @@ TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 20);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 0);
-    std::cout << "8" << std::endl;
 
     // Rearrange the first and only shelf of the warehouse.
     bool successful = warehouse.rearrangeShelf(warehouse.shelves[0]);
@@ -174,7 +166,6 @@ TEST_CASE("Rearrange half filled shelf", "Warehouse::rearrangeShelf"){
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 0);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 20);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 40);
-    std::cout << "9" << std::endl;
 }
 
 TEST_CASE("Rearrange shelf without qualified employee", "Warehouse::rearrangeShelf"){
@@ -246,4 +237,59 @@ TEST_CASE("Rearrange shelf with quallified, but busy, employee", "Warehouse::rea
     REQUIRE(warehouse.shelves[0].pallets[1].getItemCount() == 40);
     REQUIRE(warehouse.shelves[0].pallets[2].getItemCount() == 30);
     REQUIRE(warehouse.shelves[0].pallets[3].getItemCount() == 10);
+}
+
+///////////////////////////////////////////////////////////////
+//           Warehouse::pickItems test cases                 //
+///////////////////////////////////////////////////////////////
+
+TEST_CASE("Pick Items from pallets when there are exactly enough items present", "Warehouse::pickItems"){
+    // Construct Mockwarehouse.
+    Warehouse warehouse = createMockWarehouse();
+    Warehouse warehouse2 = createMockWarehouse();
+
+    // This warehouse should have 3 unsorted shelves with a total of 100 Books, 60 Boxes, and 60 Toy Bears.
+    // Check if items listed above are able to be picked when the function asks for a number that is 1 less, should succeed.
+    REQUIRE(warehouse.pickItems("Books", 99) == true);
+    REQUIRE(warehouse.pickItems("Boxes", 59) == true);
+    REQUIRE(warehouse.pickItems("Toy Bears", 59) == true);
+
+    // This warehouse should have 3 unsorted shelves with a total of 100 Books, 60 Boxes, and 60 Toy Bears.
+    // Check if items listed above are able to be picked by the exact number present, should succeed.
+    REQUIRE(warehouse2.pickItems("Books", 100) == true);
+    REQUIRE(warehouse2.pickItems("Boxes", 60) == true);
+    REQUIRE(warehouse2.pickItems("Toy Bears", 60) == true);
+}
+
+TEST_CASE("Pick Items from pallets when there is 1 item short", "Warehouse::pickItems") {
+    // Construct Mockwarehouse.
+    Warehouse warehouse = createMockWarehouse();
+
+    // This warehouse should have 3 unsorted shelves with a total of 100 Books, 60 Boxes, and 60 Toy Bears.
+    // Check if items listed above are able to be picked up when the function asks for a number that is 1 greater, should fail.
+    REQUIRE(warehouse.pickItems("Books", 101) == false);
+    REQUIRE(warehouse.pickItems("Boxes", 61) == false);
+    REQUIRE(warehouse.pickItems("Toy Bears", 61) == false);
+}
+
+TEST_CASE("When items are picked, the storaged amount should be correctly reduced afterwards", "Warehouse::pickItems") {
+    // Construct Mockwarehouse.
+    Warehouse warehouse = createMockWarehouse();
+
+    // This warehouse should have 3 unsorted shelves with a total of 100 Books, 60 Boxes, and 60 Toy Bears.
+    // Picking 10 items for every item type.
+    warehouse.pickItems("Books", 10);
+    warehouse.pickItems("Boxes", 10);
+    warehouse.pickItems("Toy Bears", 10);
+
+    // After picking 10 items from every category, this warehouse should now have 3 unsorted shelves with a total of 90 Books, 50 Boxes, and 50 Toy Bears.
+    // Check if items listed above are able to be picked up when the function asks for a number that is 1 greater, should fail.
+    REQUIRE(warehouse.pickItems("Books", 91) == false);
+    REQUIRE(warehouse.pickItems("Boxes", 51) == false);
+    REQUIRE(warehouse.pickItems("Toy Bears", 51) == false);
+
+    // Check if items listed above are able to be picked by the exact number present, should succeed.
+    REQUIRE(warehouse.pickItems("Books", 90) == true);
+    REQUIRE(warehouse.pickItems("Boxes", 50) == true);
+    REQUIRE(warehouse.pickItems("Toy Bears", 50) == true);
 }

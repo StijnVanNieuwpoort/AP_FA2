@@ -1,10 +1,12 @@
 #include "include/employee.hpp"
 
+// Constructor
 Employee::Employee(std::string name, bool forkliftCertificate) {
     this -> name = name;
     this -> forkliftCertificate = forkliftCertificate;
 }
 
+// Getters and setters.
 std::string Employee::getName() {
     return this -> name;
 }

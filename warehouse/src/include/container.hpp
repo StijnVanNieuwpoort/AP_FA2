@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+// Interface file with 2 virtual functions.
 class Container {
     public:
 
